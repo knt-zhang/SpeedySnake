@@ -102,8 +102,6 @@ def menu():
         pygame.display.update()
         clock.tick(15)
 
-
-
 def game_loop():
     game_over = False
     game_close = False
@@ -127,15 +125,19 @@ def game_loop():
             # Losing screen
             dp.fill(white)
             message("You Lost! Press Q-Quit or C-Play Again", black)
+            # message("Your score was: ", black)
             pygame.display.update()
 
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_Q:
+                    if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
-                    if event.key == pygame.K_C:
-                        gameLoop()
+                    if event.key == pygame.K_c:
+                        game_loop()
+                elif event.type == pygame.QUIT: #@6
+                    quit_game()
+                        
         for event in pygame.event.get():
             # print (event)
             if event.type == pygame.QUIT: #@1 
@@ -193,7 +195,6 @@ def game_loop():
     quit_game()
 
 menu()
-# gameLoop()
 
 
 #1 display Surface quit; Replace if event.type == pygame.quit(): by if event.type == pygame.QUIT:
@@ -201,3 +202,4 @@ menu()
 #3 food wasn't respawning or dying, added '/ 10.0) * 10.0'
 #4 Lost message wasn't appearing, replaced game_over with game_close
 #5 Make sure buttons are within display resolution
+#6 Added to quit the game at losing screen by clicking on X
