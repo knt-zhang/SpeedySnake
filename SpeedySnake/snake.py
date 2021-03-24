@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-# import shelve
+import shelve
 
 pygame.init()
 
@@ -44,8 +44,26 @@ def pause():
         clock.tick(60)
 
 def your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, black)
-    dp.blit(value, [0, 0]) 
+    value = font_style.render("Your Score: " + str(score), True, black)
+    dp.blit(value, [0, 0])
+    d = shelve.open('score.txt', 'w')
+    # replace highest score in array if larger
+    if score > d['score']:
+        d['score'] = score
+    else:
+        d['previous'] = score
+    d.close()
+
+def highscore():
+    d = shelve.open('score.txt', 'r')
+    score = d['score']  # displays highest score
+    value = font_style.render("High Score: " + str(score), True, black)
+    dp.blit(value, [100, 170])
+
+    previous = d['previous']    # display recent score
+    value_2 = font_style.render("Previous Score: " + str(previous), True, black)
+    dp.blit(value_2, [100, 200])
+    d.close()
 
 def our_snake(snake_block, snake_list):
     for x in snake_list:
@@ -118,14 +136,14 @@ def game_loop():
     foody = round(random.randrange(0, dp_height - snake_block) / 10.0) * 10
     #@3
 
+
+
     while not game_over:
-
-
         while game_close == True:
             # Losing screen
             dp.fill(white)
             message("You Lost! Press Q-Quit or C-Play Again", black)
-            # message("Your score was: ", black)
+            highscore()
             pygame.display.update()
 
             for event in pygame.event.get():
