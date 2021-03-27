@@ -13,8 +13,10 @@ bright_red = (220, 20, 60)
 green = (0, 255, 0)
 bright_green = (57, 255, 20)
 blue = (50, 153, 213)
+grey = (128, 128, 128)
+bright_grey = (150, 150, 150)
 
-dp_width = 600
+dp_width = 640
 dp_height = 400
 
 dp = pygame.display.set_mode((dp_width, dp_height))
@@ -24,8 +26,8 @@ clock = pygame.time.Clock()
 snake_block = 10
 snake_speed = 15
 
+small_text = pygame.font.SysFont("bahnschrift", 20)
 font_style = pygame.font.SysFont("bahnschrift", 25)
-score_font = pygame.font.SysFont("comicsansms", 30)
 menu_font = pygame.font.SysFont("bahnschrift", 35)
 
 def pause():
@@ -34,7 +36,7 @@ def pause():
     while loop:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                loop = 0
+                quit_game()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     loop = 0
@@ -58,11 +60,11 @@ def highscore():
     d = shelve.open('score.txt', 'r')
     score = d['score']  # displays highest score
     value = font_style.render("High Score: " + str(score), True, black)
-    dp.blit(value, [100, 170])
+    dp.blit(value, [round(dp_width/6), round(dp_height/6)])
 
     previous = d['previous']    # display recent score
     value_2 = font_style.render("Previous Score: " + str(previous), True, black)
-    dp.blit(value_2, [100, 200])
+    dp.blit(value_2, [round(dp_width/6), round(dp_height/4)])
     d.close()
 
 def our_snake(snake_block, snake_list):
@@ -72,7 +74,7 @@ def our_snake(snake_block, snake_list):
 
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
-    dp.blit(mesg, [round(dp_width/6), round(dp_height/3)])
+    dp.blit(mesg, [round(dp_width/6), round(dp_height/2.5)])
 
 def text_objects(text, font):
     text_surface = font.render(text, True, black)
@@ -90,7 +92,6 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     else:
         pygame.draw.rect(dp, ic,(x,y,w,h))
 
-    small_text = pygame.font.SysFont("comicsansms",20)
     text_surf, text_rect = text_objects(msg, small_text)
     text_rect.center = ( round(x+(w/2)), round(y+(h/2)) )
     dp.blit(text_surf, text_rect)
@@ -99,23 +100,56 @@ def quit_game():
     pygame.quit()
     quit()
 
+def controls():
+    instruction = 1
+    click = pygame.mouse.get_pressed()
+    while instruction:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_game()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    instruction = 0
+                if event.key == pygame.K_SPACE:
+                    instruction = 0
+              
+        dp.fill(white)
+        value = font_style.render("Controls: ", True, black)
+        dp.blit(value, [round(dp_width/6), round(dp_height/4)])
+
+        value_2 = small_text.render("Use the arrow directional keys to move the snake.", True, black)
+        dp.blit(value_2, [round(dp_width/6), round(dp_height/3)])
+
+        value_2 = small_text.render("Press Space or Esc to pause.", True, black)
+        dp.blit(value_2, [round(dp_width/6), round(dp_height/2.5)])
+
+        value_3 = small_text.render("Return to menu with Space or Esc", True, black)
+        dp.blit(value_3, [round(dp_width/6), round(dp_height/1.5)])
+
+        pygame.display.update()
+
 def menu():
     intro = 1
     while intro:
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 quit_game()
 
         dp.fill(white)
         text_surf, text_rect = text_objects("Speedy Snake", menu_font)
-        text_rect.center = (round(dp_width/2), round(dp_height/2))
+        text_rect.center = (round(dp_width/2), round(dp_height/3))
         dp.blit(text_surf, text_rect)
 
+        if dp_width == 800 and dp_height == 600:
         #@5
-        button("Play", 235, 250, 130, 30, green, bright_green, game_loop)
-        button("Temp", 235, 290, 130, 30, red, bright_red, quit_game)
-        button("Quit", 235, 330, 130, 30, red, bright_red, quit_game)
+            button("Play", round(dp_width/2.4), 250, 130, 30, green, bright_green, game_loop)
+            button("Controls", round(dp_width/2.4), 290, 130, 30, grey, bright_grey, controls)
+            button("Quit", round(dp_width/2.4), 330, 130, 30, red, bright_red, quit_game)
+        elif dp_width == 640 and dp_height == 400:
+                        #  position width, position height, width of bar, height of bar
+            button("Play", round(dp_width/2.5), 200, 130, 30, green, bright_green, game_loop)
+            button("Controls", round(dp_width/2.5), 240, 130, 30, grey, bright_grey, controls)
+            button("Quit", round(dp_width/2.5), 280, 130, 30, red, bright_red, quit_game)
         
         pygame.display.update()
         clock.tick(15)
@@ -136,14 +170,14 @@ def game_loop():
     foody = round(random.randrange(0, dp_height - snake_block) / 10.0) * 10
     #@3
 
-
-
     while not game_over:
         while game_close == True:
             # Losing screen
             dp.fill(white)
             message("You Lost! Press Q-Quit or C-Play Again", black)
             highscore()
+            value = font_style.render("Space - Return to menu", True, black)
+            dp.blit(value, [round(dp_width/6), round(dp_height/1.5)])
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -153,6 +187,8 @@ def game_loop():
                         game_close = False
                     if event.key == pygame.K_c:
                         game_loop()
+                    if event.key == pygame.K_SPACE:
+                        menu()
                 elif event.type == pygame.QUIT: #@6
                     quit_game()
                         
