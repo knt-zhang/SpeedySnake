@@ -179,9 +179,9 @@ def game_loop():
         while game_close == True:
             # Losing screen
             dp.fill(white)
-            message("You Lost! Press Q-Quit or C-Play Again", black)
+            message("You Lost! Press Q-Quit or M-Menu", black)
             highscore()
-            value = font_style.render("Space - Return to menu", True, black)
+            value = font_style.render("Space - Start again", True, black)
             dp.blit(value, [round(dp_width/6), round(dp_height/1.5)])
             pygame.display.update()
 
@@ -190,10 +190,10 @@ def game_loop():
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
-                    if event.key == pygame.K_c:
-                        game_loop()
+                    if event.key == pygame.K_m:
+                        menu()                        
                     if event.key == pygame.K_SPACE:
-                        menu()
+                        game_loop()
                 elif event.type == pygame.QUIT: #@6
                     quit_game()
                         
