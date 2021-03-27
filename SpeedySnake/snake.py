@@ -134,6 +134,11 @@ def menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit_game()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    quit_game()
+                if event.key == pygame.K_SPACE:
+                    game_loop()
 
         dp.fill(white)
         text_surf, text_rect = text_objects("Speedy Snake", menu_font)
