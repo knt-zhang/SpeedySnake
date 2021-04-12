@@ -62,9 +62,9 @@ def highscore():
     value = font_style.render("High Score: " + str(score), True, black)
     dp.blit(value, [round(dp_width/6), round(dp_height/6)])
 
-    previous = d['previous']    # display recent score
-    value_2 = font_style.render("Previous Score: " + str(previous), True, black)
-    dp.blit(value_2, [round(dp_width/6), round(dp_height/4)])
+    # previous = d['previous']    # display recent score
+    # value_2 = font_style.render("Previous Score: " + str(previous), True, black)
+    # dp.blit(value_2, [round(dp_width/6), round(dp_height/4)])
     d.close()
 
 def our_snake(snake_block, snake_list):
@@ -190,6 +190,7 @@ def game_loop():
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
+                        quit_game()
                     if event.key == pygame.K_m:
                         menu()                        
                     if event.key == pygame.K_SPACE:
