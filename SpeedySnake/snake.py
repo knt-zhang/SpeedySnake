@@ -48,21 +48,27 @@ def your_score(score):
     dp.blit(value, [0, 0])
     d = shelve.open('score.txt', 'w')
     # replace highest score in array if larger
-    if score > d['score']:
-        d['score'] = score
-    else:
-        d['previous'] = score
+    # if score > d['score']:
+    d['score'] = score
+    # else:
+    #     d['previous'] = score
     d.close()
 
 def highscore():
-    d = shelve.open('score.txt', 'r')
+    d = shelve.open('score.txt')
     score = d['score']  # displays highest score
     value = font_style.render("High Score: " + str(score), True, black)
     dp.blit(value, [100, 170])
 
+<<<<<<< Updated upstream
     previous = d['previous']    # display recent score
     value_2 = font_style.render("Previous Score: " + str(previous), True, black)
     dp.blit(value_2, [100, 200])
+=======
+    # previous = d['previous']    # display recent score
+    # value_2 = font_style.render("Previous Score: " + str(previous), True, black)
+    # dp.blit(value_2, [round(dp_width/6), round(dp_height/4)])
+>>>>>>> Stashed changes
     d.close()
 
 def our_snake(snake_block, snake_list):
@@ -99,6 +105,36 @@ def quit_game():
     pygame.quit()
     quit()
 
+<<<<<<< Updated upstream
+=======
+def controls():
+    instruction = 1
+    while instruction:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_game()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    instruction = 0
+                if event.key == pygame.K_SPACE:
+                    instruction = 0
+              
+        dp.fill(white)
+        value = font_style.render("Controls: ", True, black)
+        dp.blit(value, [round(dp_width/6), round(dp_height/4)])
+
+        value_2 = small_text.render("Use the arrow directional keys to move the snake.", True, black)
+        dp.blit(value_2, [round(dp_width/6), round(dp_height/3)])
+
+        value_2 = small_text.render("Press Space or Esc to pause.", True, black)
+        dp.blit(value_2, [round(dp_width/6), round(dp_height/2.5)])
+
+        value_3 = small_text.render("Return to menu with Space or Esc", True, black)
+        dp.blit(value_3, [round(dp_width/6), round(dp_height/1.5)])
+
+        pygame.display.update()
+
+>>>>>>> Stashed changes
 def menu():
     intro = 1
     while intro:
@@ -151,7 +187,14 @@ def game_loop():
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
+<<<<<<< Updated upstream
                     if event.key == pygame.K_c:
+=======
+                        quit_game()
+                    if event.key == pygame.K_m:
+                        menu()                        
+                    if event.key == pygame.K_SPACE:
+>>>>>>> Stashed changes
                         game_loop()
                 elif event.type == pygame.QUIT: #@6
                     quit_game()
